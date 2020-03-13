@@ -21,7 +21,7 @@ object's .defects attribute.
 from __future__ import unicode_literals
 from __future__ import division
 from __future__ import absolute_import
-from future.builtins import object, range, super
+from future.builtins import object, range, str, super
 from future.utils import implements_iterator, PY3
 
 __all__ = ['FeedParser', 'BytesFeedParser']
