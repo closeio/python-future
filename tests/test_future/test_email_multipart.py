@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 """Tests for multipart emails."""
 
+from __future__ import unicode_literals
+
 from future.tests.base import unittest
 import future.backports.email as email
 import future.backports.email.mime.multipart
+import future.backports.email.parser as parser
 from future.builtins import list
 
 class EmailMultiPartTests(unittest.TestCase):
@@ -29,3 +32,16 @@ class EmailMultiPartTests(unittest.TestCase):
         multipart_message.set_boundary(boundary)
         headers_type = type(multipart_message._headers)
         self.assertEqual(headers_type, type(list()))
+
+    def test_multipart_newline_boundary(self):
+        p = parser.Parser()
+        msg = '''MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="ALTERNATIVE_BOUNDARY"
+--ALTERNATIVE_BOUNDARY
+Content-Type: text/plain
+
+hello
+--ALTERNATIVE_BOUNDARY--
+'''
+        msgobj = p.parsestr(msg)
+        assert msgobj.get_payload(0).get_payload() == 'hello'
